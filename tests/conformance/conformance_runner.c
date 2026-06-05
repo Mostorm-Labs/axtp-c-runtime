@@ -459,7 +459,10 @@ int main(int argc, char** argv) {
   }
 
   char manifest_path[1024];
-  snprintf(manifest_path, sizeof(manifest_path), "%s/conformance/manifest.yaml", argv[1]);
+  snprintf(manifest_path, sizeof(manifest_path), "%s/docs/conformance/manifest.yaml", argv[1]);
+  if (!file_exists(manifest_path)) {
+    snprintf(manifest_path, sizeof(manifest_path), "%s/conformance/manifest.yaml", argv[1]);
+  }
   if (!file_exists(manifest_path)) {
     fprintf(stderr, "missing conformance manifest: %s\n", manifest_path);
     return 2;

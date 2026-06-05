@@ -1,16 +1,41 @@
 # AXTP C Runtime
 
-This repository is reserved for the AXTP C runtime.
+C runtime and SDK primitives for AXTP.
 
-No C runtime implementation was present in the AXTP source repository during
-this extraction. The repository now carries the AXTP Spec dependency contract so
-future C runtime work can bind to the same spec source of truth as the other
-runtime repositories.
+This repository owns the C implementation and its runtime generator. The AXTP
+specification, registry, schemas, protocol documents, and test vectors are owned
+by the main AXTP spec repository.
+
+## Runtime Surface
+
+The P0 runtime follows the same architecture as the C++ and Node runtimes:
+
+```text
+Transport -> axtp_endpoint_t -> axtp_core_t -> axtp_broker_t -> handler
+```
+
+It includes:
+
+- FramedBinary standard frame encode/decode with CRC16-CCITT-FALSE
+- binary RPC payload encode/decode with JSON, TLV, raw, and binary body markers
+- `axtp_mock_transport_t` for in-process client/server tests
+- `axtp_client_t` and `axtp_server_t` helpers for JSON handlers
+- generated registry lookup helpers in `include/generated/`
+
+P0 intentionally does not implement the full schema-aware TLV object codec.
+
+## Local Development
+
+```bash
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
 
 ## AXTP Spec Compatibility
 
 This runtime repository implements AXTP Spec from the AXTP main specification
-repository when C runtime sources are added.
+repository.
 
 See `AXTP_SPEC.lock.yaml` for:
 

@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct {
   uint16_t id;
@@ -34,5 +35,47 @@ static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
 };
 
 static const size_t AXTP_EVENT_REGISTRY_COUNT = 1;
+
+static inline const axtp_method_descriptor_t* axtp_method_by_id(uint16_t id) {
+  for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {
+    if (AXTP_METHOD_REGISTRY[index].id == id) {
+      return &AXTP_METHOD_REGISTRY[index];
+    }
+  }
+  return NULL;
+}
+
+static inline const axtp_method_descriptor_t* axtp_method_by_name(const char* name) {
+  if (name == NULL) {
+    return NULL;
+  }
+  for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {
+    if (strcmp(AXTP_METHOD_REGISTRY[index].name, name) == 0) {
+      return &AXTP_METHOD_REGISTRY[index];
+    }
+  }
+  return NULL;
+}
+
+static inline const axtp_event_descriptor_t* axtp_event_by_id(uint16_t id) {
+  for (size_t index = 0; index < AXTP_EVENT_REGISTRY_COUNT; ++index) {
+    if (AXTP_EVENT_REGISTRY[index].id == id) {
+      return &AXTP_EVENT_REGISTRY[index];
+    }
+  }
+  return NULL;
+}
+
+static inline const axtp_event_descriptor_t* axtp_event_by_name(const char* name) {
+  if (name == NULL) {
+    return NULL;
+  }
+  for (size_t index = 0; index < AXTP_EVENT_REGISTRY_COUNT; ++index) {
+    if (strcmp(AXTP_EVENT_REGISTRY[index].name, name) == 0) {
+      return &AXTP_EVENT_REGISTRY[index];
+    }
+  }
+  return NULL;
+}
 
 #endif

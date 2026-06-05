@@ -53,3 +53,8 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Generator local outputs
+generators/node_modules/
+generators/dist/
+generators/.vite/

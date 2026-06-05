@@ -58,3 +58,4 @@ dkms.conf
 generators/node_modules/
 generators/dist/
 generators/.vite/
+third_party/axtp-spec/

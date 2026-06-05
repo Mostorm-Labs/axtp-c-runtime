@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(axtp_c_runtime VERSION 0.0.2 LANGUAGES C)
+project(axtp_c_runtime VERSION 0.0.3 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)

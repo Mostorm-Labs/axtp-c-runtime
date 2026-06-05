@@ -36,3 +36,6 @@ add_test(NAME axtp_codec_test COMMAND axtp_codec_test)
 add_executable(axtp_sdk_test tests/sdk_test.c)
 target_link_libraries(axtp_sdk_test PRIVATE axtp_c_runtime)
 add_test(NAME axtp_sdk_test COMMAND axtp_sdk_test)
+
+add_executable(axtp_conformance_runner tests/conformance/conformance_runner.c)
+target_link_libraries(axtp_conformance_runner PRIVATE axtp_c_runtime)

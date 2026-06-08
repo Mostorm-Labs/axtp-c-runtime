@@ -178,7 +178,7 @@ static int broker_unknown_method_response(uint32_t request_id, uint16_t* status_
   task.rpc.op = AXTP_RPC_OP_REQUEST;
   task.rpc.request_id = request_id;
   task.rpc.method_or_event_id = 0x7FFFu;
-  task.rpc.body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+  task.rpc.body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
   task.rpc.meta.request_id = request_id;
   if (axtp_rpc_payload_set_body(&task.rpc, (const uint8_t*)"{}", 2) != AXTP_STATUS_OK) {
     goto cleanup_task;
@@ -227,7 +227,7 @@ static int test_request_id_match(char* message, size_t message_len) {
   payload.request_id = 55;
   payload.method_or_event_id = AXTP_METHOD_ID_AUDIO_GET_ALGORITHM_CONFIG;
   payload.status_code = AXTP_ERROR_CODE_SUCCESS;
-  payload.body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+  payload.body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
   if (axtp_rpc_payload_set_body(&payload, (const uint8_t*)"{}", 2) != AXTP_STATUS_OK) {
     snprintf(message, message_len, "failed to set response body");
     axtp_rpc_payload_free(&payload);

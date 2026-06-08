@@ -165,7 +165,7 @@ axtp_status_t axtp_broker_poll(axtp_broker_t* broker, size_t max_tasks) {
           response.status_code = AXTP_ERROR_CODE_RPC_EXECUTION_FAILED;
         } else {
           response.encoding = AXTP_RPC_ENCODING_JSON;
-          response.body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+          response.body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
           axtp_rpc_payload_set_body(&response, (const uint8_t*)body, strlen(body));
         }
       }

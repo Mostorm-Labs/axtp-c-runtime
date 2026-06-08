@@ -12,7 +12,7 @@ int main(void) {
   payload.op = AXTP_RPC_OP_REQUEST;
   payload.request_id = 7;
   payload.method_or_event_id = AXTP_METHOD_ID_AUDIO_GET_ALGORITHM_CONFIG;
-  payload.body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+  payload.body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
   assert(axtp_rpc_payload_set_body(&payload, (const uint8_t*)"{}", 2) == AXTP_STATUS_OK);
 
   uint8_t* rpc_bytes = NULL;

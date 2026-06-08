@@ -71,7 +71,7 @@ axtp_status_t axtp_client_send_json(axtp_client_t* client, const char* method_na
     client->next_request_id = 1;
   }
   payload.method_or_event_id = descriptor->id;
-  payload.body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+  payload.body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
   payload.meta.request_id = payload.request_id;
   const char* body = params_json == NULL ? "" : params_json;
   axtp_rpc_payload_set_body(&payload, (const uint8_t*)body, strlen(body));

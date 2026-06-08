@@ -11,7 +11,7 @@ void axtp_rpc_payload_init(axtp_rpc_payload_t* payload) {
   payload->encoding = AXTP_RPC_ENCODING_JSON;
   payload->op = AXTP_RPC_OP_REQUEST;
   payload->status_code = AXTP_ERROR_CODE_SUCCESS;
-  payload->body_encoding = AXTP_RPC_BODY_ENCODING_RAW_BYTES;
+  payload->body_encoding = AXTP_RPC_BODY_ENCODING_NONE;
   payload->meta.source_protocol = AXTP_SOURCE_PROTOCOL_AXTP_V1;
 }
 

@@ -17,12 +17,13 @@ Transport -> axtp_endpoint_t -> axtp_core_t -> axtp_broker_t -> handler
 It includes:
 
 - FramedBinary standard frame encode/decode with CRC16-CCITT-FALSE
-- binary RPC payload encode/decode with JSON, TLV, raw, and binary body markers
+- binary RPC payload encode/decode with JSON as the default path, plus CBOR,
+  MSGPACK, and JSON_BINARY markers from the AXTP spec
 - `axtp_mock_transport_t` for in-process client/server tests
 - `axtp_client_t` and `axtp_server_t` helpers for JSON handlers
 - generated registry lookup helpers in `include/generated/`
 
-P0 intentionally does not implement the full schema-aware TLV object codec.
+P0 intentionally does not implement the full schema-aware JSON_BINARY TLV object codec.
 
 ## Local Development
 

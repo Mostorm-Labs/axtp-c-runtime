@@ -19,6 +19,12 @@ int main(void) {
   size_t rpc_len = 0;
   assert(axtp_encode_rpc_payload(&payload, &rpc_bytes, &rpc_len) == AXTP_STATUS_OK);
   assert(rpc_len == AXTP_BINARY_RPC_HEADER_SIZE + 2);
+  assert(rpc_bytes[2] == 0x00);
+  assert(rpc_bytes[3] == 0x00);
+  assert(rpc_bytes[4] == 0x00);
+  assert(rpc_bytes[5] == 0x07);
+  assert(rpc_bytes[6] == 0x09);
+  assert(rpc_bytes[7] == 0x01);
 
   axtp_rpc_payload_t decoded_rpc;
   assert(axtp_decode_rpc_payload(rpc_bytes, rpc_len, &decoded_rpc) == AXTP_STATUS_OK);
@@ -31,6 +37,10 @@ int main(void) {
   size_t frame_len = 0;
   assert(axtp_encode_frame(AXTP_PAYLOAD_TYPE_RPC, rpc_bytes, rpc_len, 1, &frame_bytes, &frame_len) == AXTP_STATUS_OK);
   assert(frame_len == AXTP_STANDARD_FRAME_HEADER_SIZE + rpc_len + AXTP_STANDARD_FRAME_CRC_SIZE);
+  assert(frame_bytes[4] == 0x00);
+  assert(frame_bytes[5] == (uint8_t)rpc_len);
+  assert(frame_bytes[8] == 0x00);
+  assert(frame_bytes[9] == 0x01);
 
   axtp_frame_t frame;
   assert(axtp_decode_frame(frame_bytes, frame_len, &frame) == AXTP_STATUS_OK);

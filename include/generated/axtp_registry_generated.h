@@ -22,19 +22,69 @@ typedef struct {
 } axtp_event_descriptor_t;
 
 static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
+  { 0x0101, "device.getInfo", "device", "GetDeviceInfoParams", "DeviceInfo" },
+  { 0x0401, "firmware.getUpdateCapabilities", "firmware", "Empty", "FirmwareUpdateCapabilities" },
+  { 0x0402, "firmware.beginUpdate", "firmware", "BeginUpdateParams", "BeginUpdateResult" },
+  { 0x0408, "firmware.getUpdateState", "firmware", "GetUpdateStateParams", "FirmwareUpdateState" },
+  { 0x040B, "firmware.finishUpdate", "firmware", "FinishUpdateParams", "FinishUpdateResult" },
+  { 0x080B, "video.openStream", "video", "VideoOpenStreamParams", "VideoOpenStreamResult" },
+  { 0x080C, "video.closeStream", "video", "VideoCloseStreamParams", "VideoCloseStreamResult" },
+  { 0x080D, "video.getStreamState", "video", "VideoGetStreamStateParams", "VideoStreamState" },
+  { 0x0812, "video.getStreamCapabilities", "video", "VideoGetStreamCapabilitiesParams", "VideoStreamCapabilities" },
+  { 0x0813, "video.getStreamSourceState", "video", "VideoGetStreamSourceStateParams", "VideoStreamSourceState" },
+  { 0x0814, "video.requestKeyFrame", "video", "VideoRequestKeyFrameParams", "VideoRequestKeyFrameResult" },
   { 0x0901, "audio.getAlgorithmConfig", "audio", "AudioGetAlgorithmConfigRequest", "AudioAlgorithmConfig" },
   { 0x0902, "audio.setAlgorithmConfig", "audio", "AudioSetAlgorithmConfigRequest", "AudioSetAlgorithmConfigResponse" },
   { 0x090D, "audio.getAlgorithmCapabilities", "audio", "AudioGetAlgorithmCapabilitiesRequest", "AudioGetAlgorithmCapabilitiesResponse" },
   { 0x090E, "audio.resetAlgorithmConfig", "audio", "AudioResetAlgorithmConfigRequest", "AudioSetAlgorithmConfigResponse" },
+  { 0x090F, "audio.getStreamCapabilities", "audio", "AudioGetStreamCapabilitiesParams", "AudioStreamCapabilities" },
+  { 0x0910, "audio.openStream", "audio", "AudioOpenStreamParams", "AudioOpenStreamResult" },
+  { 0x0911, "audio.closeStream", "audio", "AudioCloseStreamParams", "AudioCloseStreamResult" },
+  { 0x0912, "audio.getStreamState", "audio", "AudioGetStreamStateParams", "AudioStreamState" },
+  { 0x0913, "audio.getStreamSourceState", "audio", "AudioGetStreamSourceStateParams", "AudioStreamSourceState" },
+  { 0x0E02, "network.getIpConfig", "network", "NetworkGetIpConfigParams", "NetworkIpConfig" },
+  { 0x0E03, "network.setIpConfig", "network", "NetworkSetIpConfigParams", "NetworkSetIpConfigResult" },
+  { 0x0E04, "network.getWifiConfig", "network", "NetworkGetWifiConfigParams", "NetworkWifiConfig" },
+  { 0x0E05, "network.setWifiConfig", "network", "NetworkSetWifiConfigParams", "NetworkSetWifiConfigResult" },
+  { 0x0E06, "network.scanWifi", "network", "NetworkScanWifiParams", "NetworkScanWifiResult" },
+  { 0x0E07, "network.connectWifi", "network", "NetworkConnectWifiParams", "NetworkWifiActionResult" },
+  { 0x0E08, "network.disconnectWifi", "network", "NetworkDisconnectWifiParams", "NetworkWifiActionResult" },
+  { 0x0E09, "network.getWifiState", "network", "NetworkGetWifiStateParams", "NetworkWifiState" },
+  { 0x0E0A, "network.getApConfig", "network", "NetworkGetApConfigParams", "NetworkApConfig" },
+  { 0x0E0B, "network.setApConfig", "network", "NetworkSetApConfigParams", "NetworkSetApConfigResult" },
+  { 0x0E0C, "network.startAp", "network", "NetworkApActionParams", "NetworkApActionResult" },
+  { 0x0E0D, "network.stopAp", "network", "NetworkApActionParams", "NetworkApActionResult" },
+  { 0x0E0E, "network.getApState", "network", "NetworkGetApConfigParams", "NetworkApState" },
+  { 0x0E10, "network.getInterfaces", "network", "NetworkGetInterfacesParams", "NetworkInterfaces" },
+  { 0x0E11, "network.getInterfaceInfo", "network", "NetworkGetInterfaceInfoParams", "NetworkInterfaceInfo" },
+  { 0x0E12, "network.getWifiCapabilities", "network", "NetworkGetWifiCapabilitiesParams", "NetworkWifiCapabilities" },
+  { 0x0E13, "network.getApCapabilities", "network", "NetworkGetApCapabilitiesParams", "NetworkApCapabilities" },
+  { 0x0E14, "network.getApClients", "network", "NetworkGetApConfigParams", "NetworkApClients" },
 };
 
-static const size_t AXTP_METHOD_REGISTRY_COUNT = 4;
+static const size_t AXTP_METHOD_REGISTRY_COUNT = 38;
 
 static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
+  { 0x0402, "firmware.updateProgressReported", "firmware", "FirmwareUpdateProgressEvent" },
+  { 0x0403, "firmware.updateStateChanged", "firmware", "FirmwareUpdateStateChangedEvent" },
+  { 0x0806, "video.streamStateChanged", "video", "VideoStreamStateChangedEvent" },
+  { 0x0807, "video.streamSourceStateChanged", "video", "VideoStreamSourceStateChangedEvent" },
+  { 0x0808, "video.streamStatsReported", "video", "VideoStreamStatsReportedEvent" },
   { 0x0901, "audio.algorithmConfigChanged", "audio", "AudioAlgorithmConfigChangedEvent" },
+  { 0x0902, "audio.streamStateChanged", "audio", "AudioStreamStateChangedEvent" },
+  { 0x0903, "audio.streamSourceStateChanged", "audio", "AudioStreamSourceStateChangedEvent" },
+  { 0x0904, "audio.streamStatsReported", "audio", "AudioStreamStatsReportedEvent" },
+  { 0x0E01, "network.interfaceStateChanged", "network", "NetworkInterfaceStateChangedEvent" },
+  { 0x0E02, "network.ipConfigChanged", "network", "NetworkIpConfigChangedEvent" },
+  { 0x0E03, "network.wifiConfigChanged", "network", "NetworkWifiConfigChangedEvent" },
+  { 0x0E04, "network.wifiStateChanged", "network", "NetworkWifiStateChangedEvent" },
+  { 0x0E05, "network.wifiScanResultReported", "network", "NetworkWifiScanResultReportedEvent" },
+  { 0x0E06, "network.apConfigChanged", "network", "NetworkApConfigChangedEvent" },
+  { 0x0E07, "network.apStateChanged", "network", "NetworkApStateChangedEvent" },
+  { 0x0E08, "network.apClientChanged", "network", "NetworkApClientChangedEvent" },
 };
 
-static const size_t AXTP_EVENT_REGISTRY_COUNT = 1;
+static const size_t AXTP_EVENT_REGISTRY_COUNT = 17;
 
 static inline const axtp_method_descriptor_t* axtp_method_by_id(uint16_t id) {
   for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {

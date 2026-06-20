@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(scriptDir, "..");
+const root = path.resolve(scriptDir, "../..");
 
 function parseArgs(argv) {
   const [command, ...rest] = argv;
@@ -75,9 +75,11 @@ function gitValue(args, fallback = "unknown") {
 
 async function readRuntimeVersion(runtimeName) {
   if (runtimeName === "axtp-c-runtime") {
+    const file = path.join(root, "VERSION");
+    if (existsSync(file)) return (await readText(file)).trim();
     const text = await readText(path.join(root, "CMakeLists.txt"));
     const match = text.match(/project\s*\([^)]*?\bVERSION\s+([0-9]+\.[0-9]+\.[0-9][^\s)]*)/is);
-    if (!match) throw new Error("Could not read runtime version from CMakeLists.txt project(... VERSION ...)");
+    if (!match) throw new Error("Could not read runtime version from VERSION or CMakeLists.txt project(... VERSION ...)");
     return match[1];
   }
   if (runtimeName === "axtp-cpp-runtime" || runtimeName === "axtp-mock-server") {
@@ -104,7 +106,7 @@ async function readRuntimeVersion(runtimeName) {
 }
 
 async function readGeneratorMetadata() {
-  const pkg = await readJson(path.join(root, "generators/package.json"));
+  const pkg = await readJson(path.join(root, "devtools/generators/package.json"));
   return {
     name: pkg.name,
     version: pkg.version,

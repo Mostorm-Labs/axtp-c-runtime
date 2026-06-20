@@ -11,7 +11,7 @@ import { validateProtocolDefinition } from "./protocolValidator.js";
 import { loadProtocolSources } from "./sourceLoader.js";
 import { validateSpec } from "./validator.js";
 
-const repoRoot = process.env.AXTP_SPEC_PATH ?? path.resolve("..");
+const repoRoot = process.env.AXTP_SPEC_PATH ?? path.resolve("../../third_party/axtp-spec");
 
 function cloneModel(model: ProtocolModel): ProtocolModel {
   return structuredClone(model);

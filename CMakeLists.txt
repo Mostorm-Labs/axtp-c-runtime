@@ -1,10 +1,22 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(axtp_c_runtime VERSION 0.7.0 LANGUAGES C)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" AXTP_C_RUNTIME_VERSION LIMIT_COUNT 1)
+project(axtp_c_runtime VERSION ${AXTP_C_RUNTIME_VERSION} LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
+
+set(AXTP_C_RUNTIME_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(AXTP_C_RUNTIME_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
+set(AXTP_C_RUNTIME_IS_TOP_LEVEL OFF)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  set(AXTP_C_RUNTIME_IS_TOP_LEVEL ON)
+endif()
+
+option(AXTP_C_RUNTIME_BUILD_TESTS "Build AXTP C runtime tests" ${AXTP_C_RUNTIME_IS_TOP_LEVEL})
+option(AXTP_C_RUNTIME_BUILD_CONFORMANCE "Build AXTP conformance runner" OFF)
 
 add_library(axtp_c_runtime
   src/broker.c
@@ -27,15 +39,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
   target_compile_options(axtp_c_runtime PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-enable_testing()
-
-add_executable(axtp_codec_test tests/codec_test.c)
-target_link_libraries(axtp_codec_test PRIVATE axtp_c_runtime)
-add_test(NAME axtp_codec_test COMMAND axtp_codec_test)
-
-add_executable(axtp_sdk_test tests/sdk_test.c)
-target_link_libraries(axtp_sdk_test PRIVATE axtp_c_runtime)
-add_test(NAME axtp_sdk_test COMMAND axtp_sdk_test)
-
-add_executable(axtp_conformance_runner tests/conformance/conformance_runner.c)
-target_link_libraries(axtp_conformance_runner PRIVATE axtp_c_runtime)
+if(AXTP_C_RUNTIME_BUILD_TESTS OR AXTP_C_RUNTIME_BUILD_CONFORMANCE)
+  enable_testing()
+  include(cmake/targets/tests.cmake)
+endif()

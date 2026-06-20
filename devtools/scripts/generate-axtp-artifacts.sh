@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 spec="${AXTP_SPEC_PATH:-$root/third_party/axtp-spec}"
 
 if [[ ! -d "$spec/registry" ]]; then
@@ -10,8 +10,8 @@ if [[ ! -d "$spec/registry" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$root/generators/dist/sourceLoader.js" ]]; then
-  echo "Generator is not built. Run: pnpm --dir generators build" >&2
+if [[ ! -f "$root/devtools/generators/dist/sourceLoader.js" ]]; then
+  echo "Generator is not built. Run: pnpm --dir devtools/generators build" >&2
   exit 1
 fi
 
@@ -23,8 +23,8 @@ import { pathToFileURL } from "node:url";
 const root = process.env.AXTP_RUNTIME_ROOT;
 const specRoot = process.env.AXTP_SPEC_ROOT;
 
-const { loadProtocolSources } = await import(pathToFileURL(path.join(root, "generators/dist/sourceLoader.js")).href);
-const { validateSpec } = await import(pathToFileURL(path.join(root, "generators/dist/validator.js")).href);
+const { loadProtocolSources } = await import(pathToFileURL(path.join(root, "devtools/generators/dist/sourceLoader.js")).href);
+const { validateSpec } = await import(pathToFileURL(path.join(root, "devtools/generators/dist/validator.js")).href);
 
 const spec = await loadProtocolSources(specRoot);
 for (const message of validateSpec(spec)) console.log(message);
@@ -172,4 +172,4 @@ await writeFile(path.join(outDir, "axtp_registry_generated.h"), registry);
 console.log(`[OK] generated C artifacts: ${outDir}`);
 NODE
 
-AXTP_SPEC_PATH="$spec" node "$root/scripts/axtp-versioning.mjs" generate --runtime-name axtp-c-runtime
+AXTP_SPEC_PATH="$spec" node "$root/devtools/scripts/axtp-versioning.mjs" generate --runtime-name axtp-c-runtime

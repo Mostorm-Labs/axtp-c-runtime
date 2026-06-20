@@ -74,7 +74,7 @@ If `third_party/axtp-spec` is used, check it out to the locked tag or commit.
 ## Spec Lock Checks
 
 ```bash
-scripts/check-axtp-spec-lock.sh
+devtools/scripts/check-axtp-spec-lock.sh
 ```
 
 ## AXTP Spec Upgrade
@@ -84,8 +84,8 @@ This runtime follows AXTP Spec via `AXTP_SPEC.lock.yaml`.
 To upgrade:
 
 ```bash
-scripts/upgrade-axtp-spec.sh spec/v0.3.0
-scripts/check-axtp-spec-lock.sh
+devtools/scripts/upgrade-axtp-spec.sh spec/v0.3.0
+devtools/scripts/check-axtp-spec-lock.sh
 ```
 
 After upgrading, run generator checks, the runtime build and unit tests, and
@@ -97,10 +97,10 @@ Conformance cases are owned by the AXTP spec repository. Point the runner at the
 locked spec checkout and run:
 
 ```bash
-AXTP_SPEC_PATH=/path/to/axtp scripts/run-conformance.sh
+AXTP_SPEC_PATH=/path/to/axtp devtools/scripts/run-conformance.sh
 ```
 
-The runner writes `conformance-results/result.json`. Required failures exit
+The runner writes `build/conformance-results/result.json`. Required failures exit
 nonzero. Optional cases are reported as skipped or passed unless
 `CONFORMANCE_STRICT_OPTIONAL=true`; upgrade PR workflows may temporarily use
 `CONFORMANCE_ALLOW_INCOMPLETE=true`.
@@ -128,14 +128,14 @@ Repository settings must allow GitHub Actions to create PRs, enable auto-merge, 
 
 ## Local Generator
 
-This repository maintains its own generator under `generators/`.
+This repository maintains its own generator under `devtools/generators/`.
 
 ```bash
 export AXTP_SPEC_PATH=/path/to/axtp
-pnpm --dir generators install
-pnpm --dir generators build
-pnpm --dir generators test
-pnpm --dir generators generate:runtime
+pnpm --dir devtools/generators install
+pnpm --dir devtools/generators build
+pnpm --dir devtools/generators test
+pnpm --dir devtools/generators generate:runtime
 ```
 
 Generated C artifacts are written to `include/generated/`.
@@ -143,7 +143,7 @@ Generated C artifacts are written to `include/generated/`.
 To move to a later released spec tag:
 
 ```bash
-scripts/upgrade-axtp-spec.sh spec/v0.1.0
+devtools/scripts/upgrade-axtp-spec.sh spec/v0.1.0
 ```
 
 ## Versioning
@@ -155,7 +155,7 @@ separate:
 - Runtime releases use `vX.Y.Z`.
 - Generated artifact metadata is recorded in `generated/axtp_generated_manifest.json`.
 
-Use `scripts/check-generated-version.sh` to verify that the lock file,
+Use `devtools/scripts/check-generated-version.sh` to verify that the lock file,
 generated manifest, runtime version, and generated constants are aligned.
 
 See `docs/generator/GENERATED_VERSIONING.md` for generator versioning details.

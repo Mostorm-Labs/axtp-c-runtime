@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 spec_path="${AXTP_SPEC_PATH:-}"
 if [[ -z "$spec_path" ]]; then
@@ -26,17 +26,28 @@ if [[ -z "$spec_path" || -z "$conformance_dir" ]]; then
   exit 2
 fi
 
-profile_path="$root/conformance/runtime-profile.yaml"
+profile_path="$root/devtools/conformance/runtime-profile.yaml"
 if [[ ! -f "$profile_path" ]]; then
   echo "Missing runtime conformance profile: $profile_path" >&2
   exit 2
 fi
 
 build_dir="${CONFORMANCE_BUILD_DIR:-$root/build/conformance}"
-result_dir="$root/conformance-results"
+result_dir="${CONFORMANCE_RESULT_DIR:-$root/build/conformance-results}"
 result_path="$result_dir/result.json"
 
-cmake -S "$root" -B "$build_dir"
+cache_path="$build_dir/CMakeCache.txt"
+if [[ -f "$cache_path" ]]; then
+  cached_source="$(sed -n 's/^CMAKE_HOME_DIRECTORY:INTERNAL=//p' "$cache_path" | tail -n 1)"
+  if [[ -n "$cached_source" && "$cached_source" != "$root" ]]; then
+    echo "Removing stale conformance CMake cache from $build_dir (was configured for $cached_source)." >&2
+    rm -rf "$cache_path" "$build_dir/CMakeFiles"
+  fi
+fi
+
+cmake -S "$root" -B "$build_dir" \
+  -DAXTP_C_RUNTIME_BUILD_TESTS=OFF \
+  -DAXTP_C_RUNTIME_BUILD_CONFORMANCE=ON
 cmake --build "$build_dir" --target axtp_conformance_runner
 
 mkdir -p "$result_dir"

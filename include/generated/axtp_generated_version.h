@@ -3,12 +3,12 @@
 #define AXTP_GENERATED_VERSION_H
 
 #define AXTP_RUNTIME_NAME "axtp-c-runtime"
-#define AXTP_RUNTIME_VERSION "0.8.10.0"
-#define AXTP_SPEC_VERSION "0.8.10"
-#define AXTP_SPEC_TAG "spec/v0.8.10"
-#define AXTP_SPEC_COMMIT "879d08263755ec83a210cfca25545096413092a4"
+#define AXTP_RUNTIME_VERSION "0.9.0.0"
+#define AXTP_SPEC_VERSION "0.9.0"
+#define AXTP_SPEC_TAG "spec/v0.9.0"
+#define AXTP_SPEC_COMMIT "95e57e3afce5718f31ced15d1a8ef35da49ba50d"
 #define AXTP_GENERATOR_NAME "@axtp/c-runtime-generator"
 #define AXTP_GENERATOR_VERSION "1.0.0"
-#define AXTP_GENERATED_AT "2026-06-21T19:50:33Z"
+#define AXTP_GENERATED_AT "2026-06-22T17:13:45Z"
 
 #endif

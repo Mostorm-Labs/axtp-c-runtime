@@ -23,6 +23,9 @@ typedef struct {
 
 static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x0101, "device.getInfo", "device", "GetDeviceInfoParams", "DeviceInfo" },
+  { 0x0102, "device.getPairingCode", "device", "DeviceGetPairingCodeParams", "DevicePairingCodeInfo" },
+  { 0x0103, "device.getEnrollmentState", "device", "DeviceGetEnrollmentStateParams", "DeviceEnrollmentInfo" },
+  { 0x0104, "device.setEnrollmentState", "device", "DeviceSetEnrollmentStateParams", "DeviceSetEnrollmentStateResult" },
   { 0x0401, "firmware.getUpdateCapabilities", "firmware", "Empty", "FirmwareUpdateCapabilities" },
   { 0x0402, "firmware.beginUpdate", "firmware", "BeginUpdateParams", "BeginUpdateResult" },
   { 0x0408, "firmware.getUpdateState", "firmware", "GetUpdateStateParams", "FirmwareUpdateState" },
@@ -42,6 +45,11 @@ static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x0911, "audio.closeStream", "audio", "AudioCloseStreamParams", "AudioCloseStreamResult" },
   { 0x0912, "audio.getStreamState", "audio", "AudioGetStreamStateParams", "AudioStreamState" },
   { 0x0913, "audio.getStreamSourceState", "audio", "AudioGetStreamSourceStateParams", "AudioStreamSourceState" },
+  { 0x0D01, "signage.getPlaylistCapabilities", "signage", "SignageGetPlaylistCapabilitiesParams", "SignagePlaylistCapabilitiesResult" },
+  { 0x0D02, "signage.getPlaylistConfig", "signage", "SignageGetPlaylistConfigParams", "SignagePlaylistConfigResult" },
+  { 0x0D03, "signage.setPlaylistConfig", "signage", "SignageSetPlaylistConfigParams", "SignageSetPlaylistConfigResult" },
+  { 0x0D04, "signage.resetPlaylistConfig", "signage", "SignageResetPlaylistConfigParams", "SignagePlaylistConfigResult" },
+  { 0x0D05, "signage.getPlaylistItemUrl", "signage", "SignageGetPlaylistItemUrlParams", "SignageGetPlaylistItemUrlResult" },
   { 0x0E02, "network.getIpConfig", "network", "NetworkGetIpConfigParams", "NetworkIpConfig" },
   { 0x0E03, "network.setIpConfig", "network", "NetworkSetIpConfigParams", "NetworkSetIpConfigResult" },
   { 0x0E04, "network.getWifiConfig", "network", "NetworkGetWifiConfigParams", "NetworkWifiConfig" },
@@ -78,11 +86,18 @@ static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x1610, "cast.setRenderFps", "cast", "CastSetRenderFpsParams", "CastFlowControlState" },
   { 0x1611, "cast.setFlowPolicy", "cast", "CastSetFlowPolicyParams", "CastFlowControlState" },
   { 0x1612, "cast.getStatus", "cast", "CastGetStatusParams", "CastStatus" },
+  { 0x1701, "software.getConfig", "software", "SoftwareGetConfigParams", "SoftwareConfig" },
+  { 0x1702, "software.setConfig", "software", "SoftwareSetConfigParams", "SoftwareSetConfigResult" },
+  { 0x1703, "software.resetConfig", "software", "SoftwareResetConfigParams", "SoftwareConfig" },
+  { 0x1704, "software.getUpdatePolicy", "software", "SoftwareGetUpdatePolicyParams", "SoftwareUpdatePolicy" },
+  { 0x1705, "software.setUpdatePolicy", "software", "SoftwareSetUpdatePolicyParams", "SoftwareSetUpdatePolicyResult" },
+  { 0x1706, "software.resetUpdatePolicy", "software", "SoftwareResetUpdatePolicyParams", "SoftwareUpdatePolicy" },
 };
 
-static const size_t AXTP_METHOD_REGISTRY_COUNT = 56;
+static const size_t AXTP_METHOD_REGISTRY_COUNT = 70;
 
 static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
+  { 0x0102, "device.enrollmentStateChanged", "device", "DeviceEnrollmentStateChangedEvent" },
   { 0x0402, "firmware.updateProgressReported", "firmware", "FirmwareUpdateProgressEvent" },
   { 0x0403, "firmware.updateStateChanged", "firmware", "FirmwareUpdateStateChangedEvent" },
   { 0x0806, "video.streamStateChanged", "video", "VideoStreamStateChangedEvent" },
@@ -92,6 +107,7 @@ static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
   { 0x0902, "audio.streamStateChanged", "audio", "AudioStreamStateChangedEvent" },
   { 0x0903, "audio.streamSourceStateChanged", "audio", "AudioStreamSourceStateChangedEvent" },
   { 0x0904, "audio.streamStatsReported", "audio", "AudioStreamStatsReportedEvent" },
+  { 0x0D01, "signage.playlistConfigChanged", "signage", "SignagePlaylistConfigChangedEvent" },
   { 0x0E01, "network.interfaceStateChanged", "network", "NetworkInterfaceStateChangedEvent" },
   { 0x0E02, "network.ipConfigChanged", "network", "NetworkIpConfigChangedEvent" },
   { 0x0E03, "network.wifiConfigChanged", "network", "NetworkWifiConfigChangedEvent" },
@@ -113,9 +129,11 @@ static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
   { 0x160B, "cast.backendChanged", "cast", "CastBackendChangedEvent" },
   { 0x160C, "cast.flowControlChanged", "cast", "CastFlowControlChangedEvent" },
   { 0x160D, "cast.statusChanged", "cast", "CastStatusChangedEvent" },
+  { 0x1701, "software.configChanged", "software", "SoftwareConfigChangedEvent" },
+  { 0x1702, "software.updatePolicyChanged", "software", "SoftwareUpdatePolicyChangedEvent" },
 };
 
-static const size_t AXTP_EVENT_REGISTRY_COUNT = 30;
+static const size_t AXTP_EVENT_REGISTRY_COUNT = 34;
 
 static inline const axtp_method_descriptor_t* axtp_method_by_id(uint16_t id) {
   for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {

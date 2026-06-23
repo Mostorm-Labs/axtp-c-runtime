@@ -41,6 +41,15 @@ typedef struct {
 } axtp_rpc_payload_t;
 
 typedef struct {
+  uint32_t stream_id;
+  uint32_t seq_id;
+  uint64_t cursor;
+  axtp_payload_meta_t meta;
+  uint8_t* data;
+  size_t data_len;
+} axtp_stream_payload_t;
+
+typedef struct {
   uint8_t version;
   uint8_t payload_type;
   uint16_t payload_length;
@@ -62,6 +71,10 @@ void axtp_rpc_payload_init(axtp_rpc_payload_t* payload);
 void axtp_rpc_payload_free(axtp_rpc_payload_t* payload);
 axtp_status_t axtp_rpc_payload_set_body(axtp_rpc_payload_t* payload, const uint8_t* body, size_t body_len);
 axtp_status_t axtp_rpc_payload_copy(axtp_rpc_payload_t* dst, const axtp_rpc_payload_t* src);
+void axtp_stream_payload_init(axtp_stream_payload_t* payload);
+void axtp_stream_payload_free(axtp_stream_payload_t* payload);
+axtp_status_t axtp_stream_payload_set_data(axtp_stream_payload_t* payload, const uint8_t* data, size_t data_len);
+axtp_status_t axtp_stream_payload_copy(axtp_stream_payload_t* dst, const axtp_stream_payload_t* src);
 void axtp_frame_init(axtp_frame_t* frame);
 void axtp_frame_free(axtp_frame_t* frame);
 

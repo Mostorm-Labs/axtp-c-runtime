@@ -24,8 +24,10 @@ add_library(axtp_c_runtime
   src/core.c
   src/endpoint.c
   src/io.c
+  src/media_profile.c
   src/model.c
   src/sdk.c
+  src/stream.c
   src/testing_mock_transport.c
   src/transport.c
 )

@@ -26,11 +26,14 @@ struct axtp_broker {
   size_t result_count;
   handler_entry_t handlers[32];
   size_t handler_count;
+  axtp_stream_handler_fn stream_handler;
+  void* stream_handler_user_data;
 };
 
 static void task_free(axtp_broker_task_t* task) {
   if (task != NULL) {
     axtp_rpc_payload_free(&task->rpc);
+    axtp_stream_payload_free(&task->stream);
   }
 }
 
@@ -106,6 +109,15 @@ axtp_status_t axtp_broker_register_json_method(axtp_broker_t* broker, uint16_t m
   return AXTP_STATUS_OK;
 }
 
+axtp_status_t axtp_broker_register_stream_handler(axtp_broker_t* broker, axtp_stream_handler_fn handler, void* user_data) {
+  if (broker == NULL || handler == NULL) {
+    return AXTP_STATUS_INVALID_ARGUMENT;
+  }
+  broker->stream_handler = handler;
+  broker->stream_handler_user_data = user_data;
+  return AXTP_STATUS_OK;
+}
+
 axtp_status_t axtp_broker_submit(axtp_broker_t* broker, const axtp_broker_task_t* task) {
   if (broker == NULL || task == NULL) {
     return AXTP_STATUS_INVALID_ARGUMENT;
@@ -113,8 +125,23 @@ axtp_status_t axtp_broker_submit(axtp_broker_t* broker, const axtp_broker_task_t
   if (broker->task_count >= AXTP_QUEUE_CAPACITY) {
     return AXTP_STATUS_QUEUE_FULL;
   }
+  memset(&broker->tasks[broker->task_count], 0, sizeof(broker->tasks[broker->task_count]));
   broker->tasks[broker->task_count].type = task->type;
+  if (task->type == AXTP_BROKER_TASK_STREAM_DATA) {
+    return axtp_stream_payload_copy(&broker->tasks[broker->task_count++].stream, &task->stream);
+  }
   return axtp_rpc_payload_copy(&broker->tasks[broker->task_count++].rpc, &task->rpc);
+}
+
+axtp_status_t axtp_broker_submit_stream(axtp_broker_t* broker, const axtp_stream_payload_t* stream) {
+  if (broker == NULL || stream == NULL) {
+    return AXTP_STATUS_INVALID_ARGUMENT;
+  }
+  axtp_broker_task_t task;
+  memset(&task, 0, sizeof(task));
+  task.type = AXTP_BROKER_TASK_STREAM_DATA;
+  task.stream = *stream;
+  return axtp_broker_submit(broker, &task);
 }
 
 axtp_status_t axtp_broker_poll(axtp_broker_t* broker, size_t max_tasks) {
@@ -127,6 +154,18 @@ axtp_status_t axtp_broker_poll(axtp_broker_t* broker, size_t max_tasks) {
     memmove(&broker->tasks[0], &broker->tasks[1], sizeof(broker->tasks[0]) * (broker->task_count - 1));
     broker->task_count--;
     processed++;
+
+    if (task.type == AXTP_BROKER_TASK_STREAM_DATA) {
+      if (broker->stream_handler != NULL) {
+        axtp_rpc_context_t context;
+        memset(&context, 0, sizeof(context));
+        context.session_id = task.stream.meta.session_id;
+        context.source_protocol = task.stream.meta.source_protocol;
+        (void)broker->stream_handler(&context, &task.stream, broker->stream_handler_user_data);
+      }
+      task_free(&task);
+      continue;
+    }
 
     axtp_rpc_payload_t response;
     axtp_rpc_payload_init(&response);

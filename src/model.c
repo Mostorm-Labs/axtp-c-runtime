@@ -52,6 +52,55 @@ axtp_status_t axtp_rpc_payload_copy(axtp_rpc_payload_t* dst, const axtp_rpc_payl
   return axtp_rpc_payload_set_body(dst, src->body, src->body_len);
 }
 
+void axtp_stream_payload_init(axtp_stream_payload_t* payload) {
+  if (payload == NULL) {
+    return;
+  }
+  memset(payload, 0, sizeof(*payload));
+  payload->meta.source_protocol = AXTP_SOURCE_PROTOCOL_AXTP_V1;
+}
+
+void axtp_stream_payload_free(axtp_stream_payload_t* payload) {
+  if (payload == NULL) {
+    return;
+  }
+  free(payload->data);
+  axtp_stream_payload_init(payload);
+}
+
+axtp_status_t axtp_stream_payload_set_data(axtp_stream_payload_t* payload, const uint8_t* data, size_t data_len) {
+  if (payload == NULL) {
+    return AXTP_STATUS_INVALID_ARGUMENT;
+  }
+  uint8_t* copy = NULL;
+  if (data_len > 0) {
+    copy = (uint8_t*)malloc(data_len);
+    if (copy == NULL) {
+      return AXTP_STATUS_NO_MEMORY;
+    }
+    if (data != NULL) {
+      memcpy(copy, data, data_len);
+    } else {
+      memset(copy, 0, data_len);
+    }
+  }
+  free(payload->data);
+  payload->data = copy;
+  payload->data_len = data_len;
+  return AXTP_STATUS_OK;
+}
+
+axtp_status_t axtp_stream_payload_copy(axtp_stream_payload_t* dst, const axtp_stream_payload_t* src) {
+  if (dst == NULL || src == NULL) {
+    return AXTP_STATUS_INVALID_ARGUMENT;
+  }
+  axtp_stream_payload_init(dst);
+  *dst = *src;
+  dst->data = NULL;
+  dst->data_len = 0;
+  return axtp_stream_payload_set_data(dst, src->data, src->data_len);
+}
+
 void axtp_frame_init(axtp_frame_t* frame) {
   if (frame == NULL) {
     return;

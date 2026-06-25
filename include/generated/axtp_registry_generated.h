@@ -128,12 +128,11 @@ static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
   { 0x160A, "cast.windowChanged", "cast", "CastWindowChangedEvent" },
   { 0x160B, "cast.backendChanged", "cast", "CastBackendChangedEvent" },
   { 0x160C, "cast.flowControlChanged", "cast", "CastFlowControlChangedEvent" },
-  { 0x160D, "cast.statusChanged", "cast", "CastStatusChangedEvent" },
   { 0x1701, "software.configChanged", "software", "SoftwareConfigChangedEvent" },
   { 0x1702, "software.updatePolicyChanged", "software", "SoftwareUpdatePolicyChangedEvent" },
 };
 
-static const size_t AXTP_EVENT_REGISTRY_COUNT = 34;
+static const size_t AXTP_EVENT_REGISTRY_COUNT = 33;
 
 static inline const axtp_method_descriptor_t* axtp_method_by_id(uint16_t id) {
   for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {

@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-06-25T02:34:06Z",
+  "generatedAt": "2026-07-03T02:06:19Z",
   "generator": {
     "name": "@axtp/c-runtime-generator",
     "version": "1.0.0",
-    "commit": "38ecb853d47f0594ceb9d997ec50d16b3d5462d7"
+    "commit": "ebaf5bac0ff7dfd9f94eaba2c9a6681d352c22a6"
   },
   "axtpSpec": {
     "repository": "https://github.com/Mostorm-Labs/axtp",
-    "tag": "spec/v0.11.0",
-    "version": "0.11.0",
-    "commit": "6e9594a268e840d04aa75b1de065f7d4c2debcc1"
+    "tag": "spec/v0.11.1",
+    "version": "0.11.1",
+    "commit": "5efc24113572d38a60cf7cef73b54786c8282019"
   },
   "runtime": {
     "name": "axtp-c-runtime",
-    "version": "0.11.0.0",
-    "commit": "38ecb853d47f0594ceb9d997ec50d16b3d5462d7"
+    "version": "0.11.1.0",
+    "commit": "ebaf5bac0ff7dfd9f94eaba2c9a6681d352c22a6"
   },
   "inputs": {
     "registryHash": "sha256:065f99d8d92dd39d758058d3b53e7e6d0e5b993cd7d0f329f9cd60156d3a06d8",

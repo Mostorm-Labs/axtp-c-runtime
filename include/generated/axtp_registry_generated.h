@@ -30,6 +30,14 @@ static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x0402, "firmware.beginUpdate", "firmware", "BeginUpdateParams", "BeginUpdateResult" },
   { 0x0408, "firmware.getUpdateState", "firmware", "GetUpdateStateParams", "FirmwareUpdateState" },
   { 0x040B, "firmware.finishUpdate", "firmware", "FinishUpdateParams", "FinishUpdateResult" },
+  { 0x0501, "stream.getCapabilities", "stream", "Empty", "StreamFlowControlCapabilities" },
+  { 0x0502, "stream.getState", "stream", "StreamSelector", "StreamState" },
+  { 0x0503, "stream.getStats", "stream", "StreamSelector", "StreamStats" },
+  { 0x0504, "stream.ack", "stream", "StreamAckParams", "StreamAckResult" },
+  { 0x0505, "stream.windowUpdate", "stream", "StreamWindowUpdateParams", "StreamWindowUpdateResult" },
+  { 0x0506, "stream.pause", "stream", "StreamPauseParams", "StreamActionResult" },
+  { 0x0507, "stream.resume", "stream", "StreamResumeParams", "StreamActionResult" },
+  { 0x0508, "stream.abort", "stream", "StreamAbortParams", "StreamActionResult" },
   { 0x080B, "video.openStream", "video", "VideoOpenStreamParams", "VideoOpenStreamResult" },
   { 0x080C, "video.closeStream", "video", "VideoCloseStreamParams", "VideoCloseStreamResult" },
   { 0x080D, "video.getStreamState", "video", "VideoGetStreamStateParams", "VideoStreamState" },
@@ -87,6 +95,7 @@ static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x1611, "cast.setFlowPolicy", "cast", "CastSetFlowPolicyParams", "CastFlowControlState" },
   { 0x1612, "cast.getStatus", "cast", "CastGetStatusParams", "CastStatus" },
   { 0x1613, "cast.setAudioDelay", "cast", "CastSetAudioDelayParams", "CastAudioState" },
+  { 0x1614, "cast.setVideoStreamParams", "cast", "CastSetVideoStreamParamsParams", "CastSetVideoStreamParamsResult" },
   { 0x1701, "software.getConfig", "software", "SoftwareGetConfigParams", "SoftwareConfig" },
   { 0x1702, "software.setConfig", "software", "SoftwareSetConfigParams", "SoftwareSetConfigResult" },
   { 0x1703, "software.resetConfig", "software", "SoftwareResetConfigParams", "SoftwareConfig" },
@@ -95,12 +104,16 @@ static const axtp_method_descriptor_t AXTP_METHOD_REGISTRY[] = {
   { 0x1706, "software.resetUpdatePolicy", "software", "SoftwareResetUpdatePolicyParams", "SoftwareUpdatePolicy" },
 };
 
-static const size_t AXTP_METHOD_REGISTRY_COUNT = 71;
+static const size_t AXTP_METHOD_REGISTRY_COUNT = 80;
 
 static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
   { 0x0102, "device.enrollmentStateChanged", "device", "DeviceEnrollmentStateChangedEvent" },
   { 0x0402, "firmware.updateProgressReported", "firmware", "FirmwareUpdateProgressEvent" },
   { 0x0403, "firmware.updateStateChanged", "firmware", "FirmwareUpdateStateChangedEvent" },
+  { 0x0501, "stream.stateChanged", "stream", "StreamStateChangedEvent" },
+  { 0x0502, "stream.statsReported", "stream", "StreamStatsReportedEvent" },
+  { 0x0503, "stream.flowControlChanged", "stream", "StreamFlowControlChangedEvent" },
+  { 0x0504, "stream.clockReport", "stream", "StreamClockReportEvent" },
   { 0x0806, "video.streamStateChanged", "video", "VideoStreamStateChangedEvent" },
   { 0x0807, "video.streamSourceStateChanged", "video", "VideoStreamSourceStateChangedEvent" },
   { 0x0808, "video.streamStatsReported", "video", "VideoStreamStatsReportedEvent" },
@@ -133,7 +146,7 @@ static const axtp_event_descriptor_t AXTP_EVENT_REGISTRY[] = {
   { 0x1702, "software.updatePolicyChanged", "software", "SoftwareUpdatePolicyChangedEvent" },
 };
 
-static const size_t AXTP_EVENT_REGISTRY_COUNT = 33;
+static const size_t AXTP_EVENT_REGISTRY_COUNT = 37;
 
 static inline const axtp_method_descriptor_t* axtp_method_by_id(uint16_t id) {
   for (size_t index = 0; index < AXTP_METHOD_REGISTRY_COUNT; ++index) {

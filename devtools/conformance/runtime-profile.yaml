@@ -1,12 +1,14 @@
 runtime: axtp-c-runtime
 spec_min: spec/v0.0.2
-required_levels:
-  - core
-optional_levels:
-  - capability
+required_levels: []
+optional_levels: []
 unsupported_levels:
+  # The C runtime exposes framed RPC/broker primitives, but no shared YAML graph
+  # adapter/session implementation. All shared cases are therefore reported as
+  # unsupported; broker unit tests are separate evidence.
+  - core
+  - capability
   - framed-binary
   - websocket-jsonrpc
   - event
   - stream
-

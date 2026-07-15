@@ -179,7 +179,9 @@ axtp_status_t axtp_broker_poll(axtp_broker_t* broker, size_t max_tasks) {
 
     handler_entry_t* handler = find_handler(broker, task.rpc.method_or_event_id);
     if (handler == NULL) {
-      response.status_code = AXTP_ERROR_CODE_RPC_METHOD_NOT_FOUND;
+      response.status_code = axtp_method_by_id(task.rpc.method_or_event_id) == NULL
+                                 ? AXTP_ERROR_CODE_RPC_METHOD_NOT_FOUND
+                                 : AXTP_ERROR_CODE_NOT_SUPPORTED;
     } else {
       const axtp_method_descriptor_t* descriptor = axtp_method_by_id(task.rpc.method_or_event_id);
       axtp_rpc_context_t context;
